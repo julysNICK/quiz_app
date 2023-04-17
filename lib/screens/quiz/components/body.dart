@@ -27,9 +27,12 @@ class Body extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                child: ProgressBar(),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                child: ProgressBar(
+                  index: questionController.questionNumber.value,
+                ),
               ),
               const SizedBox(
                 height: kDefaultPadding,

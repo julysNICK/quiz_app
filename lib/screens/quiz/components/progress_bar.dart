@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:websafe_svg/websafe_svg.dart';
+import 'package:get/get_state_manager/src/simple/get_state.dart';
 
 import '../../../constrants.dart';
+import '../../../controllers/question_controller.dart';
 
 class ProgressBar extends StatelessWidget {
   const ProgressBar({
     super.key,
+    required this.index,
   });
-
+  final int index;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -17,37 +19,42 @@ class ProgressBar extends StatelessWidget {
         borderRadius: BorderRadius.circular(50),
         border: Border.all(color: const Color(0xff3f4768)),
       ),
-      child: Stack(
-        children: [
-          LayoutBuilder(builder: (context, constraints) {
-            return Container(
-              width: constraints.maxWidth * 0.2,
-              decoration: const BoxDecoration(
-                gradient: kPrimaryGradient,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(50),
+      child: GetBuilder<QuestionController>(
+          init: QuestionController(),
+          builder: (controller) {
+            print(controller.questionNumberInt);
+            return Stack(
+              children: [
+                LayoutBuilder(builder: (context, constraints) {
+                  return Container(
+                    width: constraints.maxWidth *
+                        (controller.questionNumberInt / 8),
+                    decoration: const BoxDecoration(
+                      gradient: kPrimaryGradient,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(50),
+                      ),
+                    ),
+                  );
+                }),
+                Positioned.fill(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: kDefaultPadding / 2),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "${controller.questionNumberInt}/8 questions",
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+              ],
             );
           }),
-          Positioned.fill(
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "10 sec",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  WebsafeSvg.asset("assets/icons/clock.svg"),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

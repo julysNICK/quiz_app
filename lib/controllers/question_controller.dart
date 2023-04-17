@@ -5,6 +5,30 @@ import '../models/Question.dart';
 
 class QuestionController extends GetxController
     with GetSingleTickerProviderStateMixin {
+//animate progressbar based on answered questions
+  AnimationController? _animationController;
+  Animation? _animation;
+
+  Animation get animation => _animation!;
+
+  @override
+  void onInit() {
+    _animationController =
+        AnimationController(duration: const Duration(seconds: 60), vsync: this);
+    _animation = Tween<double>(begin: 0, end: 1).animate(_animationController!)
+      ..addListener(() {
+        update();
+      });
+    _animationController!.forward();
+    super.onInit();
+  }
+
+  @override
+  void onClose() {
+    _animationController!.dispose();
+    super.onClose();
+  }
+
   final List<Question> _questions = sample_data
       .map((question) => Question(
           id: question.id,
@@ -30,6 +54,8 @@ class QuestionController extends GetxController
   int get selectedAns => _selectedAns;
 
   final RxInt _questionNumber = 1.obs;
+
+  int get questionNumberInt => _questionNumber.value;
 
   RxInt get questionNumber => _questionNumber;
 
