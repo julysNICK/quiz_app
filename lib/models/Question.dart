@@ -10,7 +10,7 @@ class Question {
       required this.answer});
 }
 
-final List sample_data = [
+final List<Question> sample_data = [
   Question(
       id: 1,
       question: "Em geral, como você se sente em relação ao seu trabalho?",
