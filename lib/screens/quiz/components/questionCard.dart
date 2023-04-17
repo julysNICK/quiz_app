@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
 import '../../../constrants.dart';
+import '../../../controllers/question_controller.dart';
 import '../../../models/Question.dart';
 import 'option.dart';
 
 class QuestionCard extends StatelessWidget {
   const QuestionCard({
     super.key,
+    required this.question,
   });
+
+  final Question question;
 
   @override
   Widget build(BuildContext context) {
+    QuestionController questionController = Get.put(QuestionController());
     return Container(
       margin: const EdgeInsets.all(kDefaultPadding),
       padding: const EdgeInsets.all(kDefaultPadding),
@@ -25,20 +30,23 @@ class QuestionCard extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            sample_data[0].question,
-            style: Theme.of(context)
-                .textTheme
-                .headlineMedium!
-                .copyWith(color: kBlackColor),
+            question.question,
+            style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                  color: kBlackColor,
+                  fontSize: 25,
+                ),
           ),
           const SizedBox(
             height: kDefaultPadding,
           ),
-          const Option(),
-          const Option(),
-          const Option(),
-          const Option(),
-          const Option(),
+          ...List.generate(
+            question.options.length,
+            (index) => Option(
+              index: index,
+              text: question.options[index],
+              press: () => questionController.checkAns(question, index),
+            ),
+          ),
         ],
       ),
     );
