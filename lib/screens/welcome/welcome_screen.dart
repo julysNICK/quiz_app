@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:quiz_app/screens/quiz/quiz_screen.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
 import '../../constrants.dart';
@@ -54,7 +56,7 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   const Spacer(),
                   InkWell(
-                    onTap: () {},
+                    onTap: () => Get.to(const QuizScreen()),
                     child: Container(
                       width: double.infinity,
                       alignment: Alignment.center,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:quiz_app/screens/after_quiz/after_quiz_screen.dart';
 import 'package:quiz_app/screens/quiz/components/body.dart';
 
 class QuizScreen extends StatelessWidget {
@@ -11,11 +13,11 @@ class QuizScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        actions: const [
+        actions: [
           TextButton(
-            onPressed: null,
-            child: Text(
-              "Skip",
+            onPressed: () => Get.to(const AfterQuiz()),
+            child: const Text(
+              "Pular",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18,

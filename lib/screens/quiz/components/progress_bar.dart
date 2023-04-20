@@ -22,7 +22,6 @@ class ProgressBar extends StatelessWidget {
       child: GetBuilder<QuestionController>(
           init: QuestionController(),
           builder: (controller) {
-            print(controller.questionNumberInt);
             return Stack(
               children: [
                 LayoutBuilder(builder: (context, constraints) {
@@ -45,7 +44,7 @@ class ProgressBar extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "${controller.questionNumberInt}/8 questions",
+                          "${controller.questionNumberInt}º questão",
                           style: const TextStyle(color: Colors.white),
                         ),
                       ],
