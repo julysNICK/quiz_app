@@ -37,6 +37,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   websafe_svg: ^3.0.0+4
   get: ^4.6.5
+  expandable: ^5.0.1
+  fl_chart: ^0.62.0
 
 dev_dependencies:
   flutter_test:
