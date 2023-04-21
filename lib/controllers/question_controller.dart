@@ -39,6 +39,14 @@ class QuestionController extends GetxController
 
   final PageController _pageController = PageController();
 
+  final Map<String, int> counterAnswer = {
+    'concordo': 0,
+    'concordo_parcialmente': 0,
+    'nao_concordo': 0,
+    'nao_concordo_parcialmente': 0,
+    'neutro': 0,
+  };
+
   PageController get pageController => _pageController;
 
   List<Question> get questions => _questions;
@@ -63,19 +71,39 @@ class QuestionController extends GetxController
 
   int get numOfCorrectAns => _numOfCorrectAns;
 
-  void checkAns(Question question, int selectedAns) {
-    _isAnswered = true;
-
-    _correctAns = question.answer;
-    _selectedAns = selectedAns;
-
-    if (_correctAns == _selectedAns) _numOfCorrectAns++;
+  void updateCounterAnswer(int index) {
+    switch (index) {
+      case 0:
+        counterAnswer['concordo'] = counterAnswer['concordo']! + 1;
+        break;
+      case 1:
+        counterAnswer['concordo_parcialmente'] =
+            counterAnswer['concordo_parcialmente']! + 1;
+        break;
+      case 2:
+        counterAnswer['nao_concordo'] = counterAnswer['nao_concordo']! + 1;
+        break;
+      case 3:
+        counterAnswer['nao_concordo_parcialmente'] =
+            counterAnswer['nao_concordo_parcialmente']! + 1;
+        break;
+      case 4:
+        counterAnswer['neutro'] = counterAnswer['neutro']! + 1;
+        break;
+    }
 
     update();
+  }
 
+  void checkAns(Question question, int selectedAns) {
+    _isAnswered = true;
+    _correctAns = question.answer;
+    _selectedAns = selectedAns;
+    if (_correctAns == _selectedAns) _numOfCorrectAns++;
+    updateCounterAnswer(selectedAns);
+    update();
     Future.delayed(const Duration(seconds: 1), () {
       _isAnswered = false;
-
       _pageController.nextPage(
           duration: const Duration(milliseconds: 250), curve: Curves.ease);
     });
