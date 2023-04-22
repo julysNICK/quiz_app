@@ -10,6 +10,32 @@ class Question {
       required this.answer});
 }
 
+class QuestionRepo {
+  int? id = 0;
+  int? agree = 0;
+  int? partiallyAgree = 0;
+  int? disagree = 0;
+  int? partiallyDisagree = 0;
+  int? neutral = 0;
+
+  QuestionRepo({
+    this.id = 0,
+    this.agree = 0,
+    this.partiallyAgree = 0,
+    this.disagree = 0,
+    this.partiallyDisagree = 0,
+    this.neutral = 0,
+  });
+
+  void reset() {
+    agree = 0;
+    partiallyAgree = 0;
+    disagree = 0;
+    partiallyDisagree = 0;
+    neutral = 0;
+  }
+}
+
 final List<Question> sample_data = [
   Question(
       id: 1,

@@ -26,14 +26,8 @@ class ResultsForms extends StatelessWidget {
           ListView(
             children: [
               buildCard(
-                'Formulário 1',
+                'Formulario de satisfação do funcionário',
               ),
-              buildCard(
-                'Formulário 1',
-              ),
-              buildCard(
-                'Formulário 1',
-              )
             ],
           )
         ],
@@ -46,8 +40,8 @@ class ResultsForms extends StatelessWidget {
         child: Card(
           child: ListTile(
             onTap: () => Get.to(() => const DetailsResults()),
-            title: const Text('Formulário 1'),
-            subtitle: const Text('Descrição do formulário 1'),
+            title: Text(s),
+            subtitle: const Text('Ver resultados'),
             trailing: const Icon(Icons.arrow_forward_ios),
           ),
         ),

@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../models/Question.dart';
+import '../repositories/forms.dart';
+import '../screens/after_quiz/after_quiz_screen.dart';
 
 class QuestionController extends GetxController
     with GetSingleTickerProviderStateMixin {
 //animate progressbar based on answered questions
   AnimationController? _animationController;
+  QuestionRepo questionRepo = QuestionRepo();
   Animation? _animation;
 
   Animation get animation => _animation!;
@@ -48,7 +51,7 @@ class QuestionController extends GetxController
   };
 
   PageController get pageController => _pageController;
-
+  List<Map<String, dynamic>> list = [];
   List<Question> get questions => _questions;
   bool _isAnswered = false;
 
@@ -74,39 +77,72 @@ class QuestionController extends GetxController
   void updateCounterAnswer(int index) {
     switch (index) {
       case 0:
-        counterAnswer['concordo'] = counterAnswer['concordo']! + 1;
+        counterAnswer['concordo'] = 1;
+        questionRepo.agree = counterAnswer['concordo'];
         break;
       case 1:
-        counterAnswer['concordo_parcialmente'] =
-            counterAnswer['concordo_parcialmente']! + 1;
+        counterAnswer['concordo_parcialmente'] = 1;
+        questionRepo.partiallyAgree = counterAnswer['concordo_parcialmente'];
         break;
       case 2:
-        counterAnswer['nao_concordo'] = counterAnswer['nao_concordo']! + 1;
+        counterAnswer['nao_concordo'] = 1;
+        questionRepo.disagree = counterAnswer['nao_concordo'];
         break;
       case 3:
-        counterAnswer['nao_concordo_parcialmente'] =
-            counterAnswer['nao_concordo_parcialmente']! + 1;
+        counterAnswer['nao_concordo_parcialmente'] = 1;
+        questionRepo.partiallyDisagree =
+            counterAnswer['nao_concordo_parcialmente'];
         break;
       case 4:
-        counterAnswer['neutro'] = counterAnswer['neutro']! + 1;
+        counterAnswer['neutro'] = 1;
+        questionRepo.neutral = counterAnswer['neutro'];
         break;
     }
 
     update();
   }
 
-  void checkAns(Question question, int selectedAns) {
+  Future<void> postAnswerFireBase() async {
+    try {
+      await FormsRepoService().createResultsForm(questionRepo);
+      questionRepo.reset();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> getAnswerFireBase() async {
+    try {
+      list = await FormsRepoService().getResultsForm();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void checkAns(Question question, int selectedAns) async {
     _isAnswered = true;
     _correctAns = question.answer;
+    questionRepo.id = question.id;
     _selectedAns = selectedAns;
     if (_correctAns == _selectedAns) _numOfCorrectAns++;
     updateCounterAnswer(selectedAns);
     update();
+    print(question.id);
     Future.delayed(const Duration(seconds: 1), () {
       _isAnswered = false;
       _pageController.nextPage(
           duration: const Duration(milliseconds: 250), curve: Curves.ease);
     });
+
+    try {
+      await postAnswerFireBase();
+    } catch (e) {
+      print(e);
+    }
+
+    if (question.id == 8) {
+      Get.to(() => const AfterQuiz());
+    }
   }
 
   void PreviousQuestion() {

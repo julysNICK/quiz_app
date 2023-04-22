@@ -33,16 +33,35 @@ class DetailsResults extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold))),
               ),
-              buildCard(context),
-              buildCard(context),
-              buildCard(context),
-              buildCard(context),
-              buildCard(context),
-              buildCard(context),
-              buildCard(context),
-              buildCard(context),
-              buildCard(context),
-              buildCard(context),
+              buildCard(context,
+                  title:
+                      "Em geral, como você se sente em relação ao seu trabalho?"),
+              buildCard(context,
+                  title:
+                      'Você se sente valorizado e reconhecido pela empresa?'),
+              buildCard(context,
+                  title:
+                      'Você se sente motivado para realizar suas tarefas diárias?'),
+              buildCard(context,
+                  title:
+                      'Você se sente confiante em relação ao seu futuro na empresa?'),
+              buildCard(context,
+                  title:
+                      'Você acha que as informações importantes são comunicadas de forma clara e eficaz?'),
+              buildCard(context,
+                  title:
+                      'Você tem acesso às informações necessárias para realizar seu trabalho?'),
+              buildCard(context,
+                  title:
+                      'Você se sente confortável para expressar suas ideias e opiniões no ambiente de trabalho?'),
+              buildCard(context,
+                  title:
+                      'A empresa ouve e responde às suas sugestões e comentários?'),
+              buildCard(context,
+                  title:
+                      ' Você acredita que seus superiores são competentes e capazes de liderar a equipe?'),
+              buildCard(context,
+                  title: 'Eles fornecem orientação e apoio quando necessário?'),
             ],
           )
         ],
@@ -50,7 +69,7 @@ class DetailsResults extends StatelessWidget {
     );
   }
 
-  Padding buildCard(BuildContext context) {
+  Padding buildCard(BuildContext context, {String title = ""}) {
     return Padding(
       padding: const EdgeInsetsDirectional.all(10),
       child: Card(
@@ -60,11 +79,11 @@ class DetailsResults extends StatelessWidget {
             headerAlignment: ExpandablePanelHeaderAlignment.center,
             tapBodyToCollapse: true,
           ),
-          header: const Padding(
-            padding: EdgeInsets.all(8.0),
+          header: Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Text(
-              'Em geral, como você se sente em relação ao seu trabalho?',
-              style: TextStyle(
+              title,
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),
