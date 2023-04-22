@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "12459321145",
+    "project_id": "forms-app-e2fee",
+    "storage_bucket": "forms-app-e2fee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:12459321145:android:4c68b7fc30a747aa4faae8",
+        "android_client_info": {
+          "package_name": "com.example.quiz_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "12459321145-e8ucn28ue6s39aa08fig9a6d5c6qire8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZ5VMN310uu3oVXNHyL7QptmYtSln3CEo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "12459321145-e8ucn28ue6s39aa08fig9a6d5c6qire8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
