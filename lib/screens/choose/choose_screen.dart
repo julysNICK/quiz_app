@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
 import '../../constrants.dart';
-import '../quiz/quiz_screen.dart';
-import '../results_forms/results_forms_screen.dart';
+import '../welcomeEmployer/welcome_screen.dart';
+import '../welcomeEnterprise/welcome_enterprise_screen.dart';
 
 class Choose extends StatelessWidget {
   const Choose({super.key});
@@ -46,7 +46,7 @@ class Choose extends StatelessWidget {
                     height: 30,
                   ),
                   InkWell(
-                    onTap: () => Get.to(() => const ResultsForms()),
+                    onTap: () => Get.to(() => const WelcomeEnterpriseScreen()),
                     child: Container(
                       width: double.infinity,
                       alignment: Alignment.center,
@@ -70,7 +70,7 @@ class Choose extends StatelessWidget {
                     height: 25,
                   ),
                   InkWell(
-                    onTap: () => Get.to(() => const QuizScreen()),
+                    onTap: () => Get.to(() => const WelcomeScreen()),
                     child: Container(
                       width: double.infinity,
                       alignment: Alignment.center,

@@ -51,7 +51,7 @@ class _DetailsResultsState extends State<DetailsResults> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text("DetailsResults"),
+        title: const Text("Detalhes dos resultados"),
         backgroundColor: Colors.grey[900]!.withOpacity(0.8),
         elevation: 0,
       ),
