@@ -14,10 +14,10 @@ class WelcomeEnterpriseScreen extends StatefulWidget {
 }
 
 class _WelcomeEnterpriseScreenState extends State<WelcomeEnterpriseScreen> {
+  final _formKey = GlobalKey<FormState>();
   TextEditingController? controllerEmail;
   TextEditingController? controllerPassword;
   bool isPasswordVisible = false;
-  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {

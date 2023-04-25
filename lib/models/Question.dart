@@ -45,7 +45,6 @@ final List<Question> sample_data = [
         "Concordo parcialmente",
         "Não concordo ",
         "Não concordo parcialmente",
-        "Neutro"
       ],
       answer: 1),
   Question(
@@ -56,7 +55,6 @@ final List<Question> sample_data = [
         "Concordo parcialmente",
         "Não concordo ",
         "Não concordo parcialmente",
-        "Neutro"
       ],
       answer: 1),
   Question(
@@ -67,7 +65,6 @@ final List<Question> sample_data = [
         "Concordo parcialmente",
         "Não concordo ",
         "Não concordo parcialmente",
-        "Neutro"
       ],
       answer: 2),
   Question(
@@ -78,7 +75,6 @@ final List<Question> sample_data = [
         "Concordo parcialmente",
         "Não concordo ",
         "Não concordo parcialmente",
-        "Neutro"
       ],
       answer: 2),
   Question(
@@ -90,7 +86,6 @@ final List<Question> sample_data = [
         "Concordo parcialmente",
         "Não concordo ",
         "Não concordo parcialmente",
-        "Neutro"
       ],
       answer: 2),
   Question(
@@ -102,7 +97,6 @@ final List<Question> sample_data = [
         "Concordo parcialmente",
         "Não concordo ",
         "Não concordo parcialmente",
-        "Neutro"
       ],
       answer: 2),
   Question(
@@ -114,7 +108,6 @@ final List<Question> sample_data = [
         "Concordo parcialmente",
         "Não concordo ",
         "Não concordo parcialmente",
-        "Neutro"
       ],
       answer: 2),
   Question(
@@ -126,7 +119,6 @@ final List<Question> sample_data = [
         "Concordo parcialmente",
         "Não concordo ",
         "Não concordo parcialmente",
-        "Neutro"
       ],
       answer: 2),
 ];

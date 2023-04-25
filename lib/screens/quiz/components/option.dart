@@ -43,7 +43,7 @@ class Option extends StatelessWidget {
             child: Container(
               margin: const EdgeInsets.only(top: kDefaultPadding),
               padding:
-                  EdgeInsets.all(MediaQuery.of(context).size.height * 0.018),
+                  EdgeInsets.all(MediaQuery.of(context).size.height * 0.030),
               decoration: BoxDecoration(
                 border: Border.all(color: getTheRightColor()),
                 borderRadius: const BorderRadius.all(
