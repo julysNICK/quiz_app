@@ -33,13 +33,81 @@ class FormsRepoService {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getResultsForm() async {
+  Future<bool> verifyIfIdExists(
+    QuestionRepo questionRepo,
+  ) async {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await FirebaseFirestore.instance
               .collection('forms')
-              .orderBy('_id')
+              .where('_id', isEqualTo: questionRepo.id)
               .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print(e);
+      returnError(e.toString());
+      return false;
+    }
+  }
+
+  Future<dynamic> getResultsFormById(
+    QuestionRepo questionRepo,
+  ) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('forms')
+              .where('_id', isEqualTo: questionRepo.id)
+              .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs.first;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print(e);
+      returnError(e.toString());
+      return null;
+    }
+  }
+
+  Future updateResutsForms(QuestionRepo question) async {
+    try {
+      if (await verifyIfIdExists(question)) {
+        dynamic result = await getResultsFormById(question);
+
+        await FirebaseFirestore.instance
+            .collection('forms')
+            .doc('${result.id}')
+            .update({
+          'concordo': result.data()['concordo'] + question.agree,
+          'concordo_parcialmente':
+              result.data()['concordo_parcialmente'] + question.partiallyAgree,
+          'nao_concordo': result.data()['nao_concordo'] + question.disagree,
+          'nao_concordo_parcialmente':
+              result.data()['nao_concordo_parcialmente'] +
+                  question.partiallyDisagree,
+          'neutro': result.data()['neutro'] + question.neutral,
+        });
+      } else {
+        await createResultsForm(question);
+      }
+    } catch (e) {
+      print(e);
+      returnError(e.toString());
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getResultsForm() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance.collection('forms').get();
 
       List<Map<String, dynamic>> list = [];
 

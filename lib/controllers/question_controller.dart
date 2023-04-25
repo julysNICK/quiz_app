@@ -52,6 +52,8 @@ class QuestionController extends GetxController
 
   PageController get pageController => _pageController;
   List<Map<String, dynamic>> list = [];
+  Map<String, dynamic> resultList = {};
+  List<dynamic> newList = [];
   List<Question> get questions => _questions;
   bool _isAnswered = false;
 
@@ -104,18 +106,35 @@ class QuestionController extends GetxController
 
   Future<void> postAnswerFireBase() async {
     try {
-      await FormsRepoService().createResultsForm(questionRepo);
+      await FormsRepoService().updateResutsForms(questionRepo);
       questionRepo.reset();
     } catch (e) {
       print(e);
     }
   }
 
-  Future<void> getAnswerFireBase() async {
+  Future<List<dynamic>> getAnswerFireBase() async {
     try {
       list = await FormsRepoService().getResultsForm();
+      //format List
+
+      List formatList = list.map(
+        (e) {
+          return {
+            '_id': e['_id'],
+            'concordo': e['concordo'],
+            'concordo_parcialmente': e['concordo_parcialmente'],
+            'nao_concordo': e['nao_concordo'],
+            'nao_concordo_parcialmente': e['nao_concordo_parcialmente'],
+            'neutro': e['neutro'],
+          };
+        },
+      ).toList();
+
+      return formatList..sort((a, b) => a['_id'].compareTo(b['_id']));
     } catch (e) {
       print(e);
+      return [];
     }
   }
 

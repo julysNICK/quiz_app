@@ -1,11 +1,50 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
 import '../../constrants.dart';
+import '../../controllers/question_controller.dart';
+import '../../models/Question.dart';
 
-class DetailsResults extends StatelessWidget {
+class DetailsResults extends StatefulWidget {
   const DetailsResults({super.key});
+
+  @override
+  State<DetailsResults> createState() => _DetailsResultsState();
+}
+
+class _DetailsResultsState extends State<DetailsResults> {
+  QuestionController questionController = Get.put(QuestionController());
+  List<dynamic> newList = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    questionController.getAnswerFireBase().then((value) {
+      setState(() {
+        newList = value;
+      });
+    });
+  }
+
+  String formmatString(String string) {
+    switch (string) {
+      case 'concordo':
+        return 'Concordo';
+      case 'concordo_parcialmente':
+        return 'Concordo parcialmente';
+      case 'nao_concordo':
+        return 'Não concordo';
+      case 'nao_concordo_parcialmente':
+        return 'Não concordo parcialmente';
+      case 'neutro':
+        return 'Neutro';
+      default:
+        return 'Não respondido';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,35 +72,20 @@ class DetailsResults extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold))),
               ),
-              buildCard(context,
-                  title:
-                      "Em geral, como você se sente em relação ao seu trabalho?"),
-              buildCard(context,
-                  title:
-                      'Você se sente valorizado e reconhecido pela empresa?'),
-              buildCard(context,
-                  title:
-                      'Você se sente motivado para realizar suas tarefas diárias?'),
-              buildCard(context,
-                  title:
-                      'Você se sente confiante em relação ao seu futuro na empresa?'),
-              buildCard(context,
-                  title:
-                      'Você acha que as informações importantes são comunicadas de forma clara e eficaz?'),
-              buildCard(context,
-                  title:
-                      'Você tem acesso às informações necessárias para realizar seu trabalho?'),
-              buildCard(context,
-                  title:
-                      'Você se sente confortável para expressar suas ideias e opiniões no ambiente de trabalho?'),
-              buildCard(context,
-                  title:
-                      'A empresa ouve e responde às suas sugestões e comentários?'),
-              buildCard(context,
-                  title:
-                      ' Você acredita que seus superiores são competentes e capazes de liderar a equipe?'),
-              buildCard(context,
-                  title: 'Eles fornecem orientação e apoio quando necessário?'),
+              sample_data.isEmpty
+                  ? const Center(
+                      child: Text("Sem dados",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)))
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: sample_data.length,
+                      itemBuilder: (context, index) {
+                        return buildCard(
+                            context, sample_data[index], newList[index]);
+                      },
+                    ),
             ],
           )
         ],
@@ -69,7 +93,9 @@ class DetailsResults extends StatelessWidget {
     );
   }
 
-  Padding buildCard(BuildContext context, {String title = ""}) {
+  Padding buildCard(
+      BuildContext context, Question question, Map<String, dynamic> newList) {
+    print(newList.entries.map((e) => e.key).toList());
     return Padding(
       padding: const EdgeInsetsDirectional.all(10),
       child: Card(
@@ -82,7 +108,7 @@ class DetailsResults extends StatelessWidget {
           header: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              title,
+              question.question,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -95,11 +121,29 @@ class DetailsResults extends StatelessWidget {
           ),
           expanded: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(
-              List.generate(5, (index) => 'Resposta A: 5').join('\n\n'),
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    fontSize: 16,
-                  ),
+            child: Column(
+              children: newList.isNotEmpty
+                  ? newList.entries
+                      .map((e) => Padding(
+                            padding: const EdgeInsets.all(0.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: e.key != '_id'
+                                      ? Text(
+                                          '${formmatString(e.key)}: ${e.value.toString()}',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                          ),
+                                        )
+                                      : Container(),
+                                ),
+                              ],
+                            ),
+                          ))
+                      .toList()
+                  : [const Text('Sem respostas')],
             ),
           ),
         ),
