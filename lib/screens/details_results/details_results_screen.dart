@@ -72,7 +72,7 @@ class _DetailsResultsState extends State<DetailsResults> {
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold))),
               ),
-              sample_data.isEmpty
+              sample_data.isEmpty && newList.isEmpty
                   ? const Center(
                       child: Text("Sem dados",
                           style: TextStyle(
@@ -95,7 +95,6 @@ class _DetailsResultsState extends State<DetailsResults> {
 
   Padding buildCard(
       BuildContext context, Question question, Map<String, dynamic> newList) {
-    print(newList.entries.map((e) => e.key).toList());
     return Padding(
       padding: const EdgeInsetsDirectional.all(10),
       child: Card(

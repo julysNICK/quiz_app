@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:quiz_app/screens/results_forms/results_forms_screen.dart';
+
 import 'package:websafe_svg/websafe_svg.dart';
 
 import '../../constrants.dart';
+import '../../models/User.dart';
+import '../../repositories/user.dart';
+import '../results_forms/results_forms_screen.dart';
 
 class WelcomeEnterpriseScreen extends StatefulWidget {
   const WelcomeEnterpriseScreen({super.key});
@@ -15,16 +18,33 @@ class WelcomeEnterpriseScreen extends StatefulWidget {
 
 class _WelcomeEnterpriseScreenState extends State<WelcomeEnterpriseScreen> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController? controllerEmail;
-  TextEditingController? controllerPassword;
-  bool isPasswordVisible = false;
+  TextEditingController controllerEmail = TextEditingController();
+  TextEditingController controllerPassword = TextEditingController();
+  bool isPasswordVisible = true;
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    controllerEmail!.dispose();
-    controllerPassword!.dispose();
+    controllerEmail.dispose();
+    controllerPassword.dispose();
+  }
+
+  void login() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        await UserRepoService().getUserAdmin(
+          UserAdmin(
+            email: controllerEmail.text.trim(),
+            password: controllerPassword.text.trim(),
+          ),
+        );
+
+        Get.to(() => const ResultsForms());
+      } catch (e) {
+        print(e);
+      }
+    }
   }
 
   @override
@@ -136,9 +156,7 @@ class _WelcomeEnterpriseScreenState extends State<WelcomeEnterpriseScreen> {
                     const Spacer(),
                     InkWell(
                       onTap: () {
-                        if (_formKey.currentState!.validate()) {
-                          Get.to(() => const ResultsForms());
-                        }
+                        login();
                       },
                       child: Container(
                         width: double.infinity,

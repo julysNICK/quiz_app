@@ -19,7 +19,7 @@ class UserRepoService {
     UserAdmin userAdmin,
   ) async {
     try {
-      await FirebaseFirestore.instance.collection('users').add({
+      await FirebaseFirestore.instance.collection('employers').add({
         'email': userAdmin.email,
         'password': userAdmin.password,
       });
@@ -48,7 +48,7 @@ class UserRepoService {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await FirebaseFirestore.instance
-              .collection('users')
+              .collection('admins')
               .where('email', isEqualTo: userAdmin.email)
               .where('password', isEqualTo: userAdmin.password)
               .get();
@@ -66,7 +66,7 @@ class UserRepoService {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await FirebaseFirestore.instance
-              .collection('users')
+              .collection('employer')
               .where('name', isEqualTo: userEmployer.name)
               .get();
       return querySnapshot.docs.first.data();
@@ -74,6 +74,49 @@ class UserRepoService {
       print(e);
       returnError(e.toString());
       return {};
+    }
+  }
+
+  Future<bool> employerExist(
+    UserEmployer userEmployer,
+  ) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('employer')
+              .where('name', isEqualTo: userEmployer.name)
+              .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<void> createEmployer(
+    UserEmployer userEmployer,
+  ) async {
+    try {
+      await FirebaseFirestore.instance.collection('employers').add({
+        "name": userEmployer.name,
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> createOrNoEmployer(
+    UserEmployer userEmployer,
+  ) async {
+    try {
+      if (!(await employerExist(userEmployer))) {
+        await createEmployer(userEmployer);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 }

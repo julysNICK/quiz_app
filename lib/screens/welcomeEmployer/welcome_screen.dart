@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quiz_app/repositories/user.dart';
 import 'package:quiz_app/screens/quiz/quiz_screen.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
 import '../../constrants.dart';
+import '../../models/User.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -14,7 +16,20 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController? controllerName;
+  TextEditingController controllerName = TextEditingController();
+  void login() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        await UserRepoService().createOrNoEmployer(UserEmployer(
+          name: controllerName.text.trim(),
+        ));
+        Get.to(() => const QuizScreen());
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,9 +89,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     const Spacer(),
                     InkWell(
                       onTap: () {
-                        if (_formKey.currentState!.validate()) {
-                          Get.to(() => const QuizScreen());
-                        }
+                        login();
                       },
                       child: Container(
                         width: double.infinity,
