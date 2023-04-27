@@ -33,6 +33,21 @@ class FormsRepoService {
     }
   }
 
+  Future<void> createResultsSubjectiveForm(
+    SubjectiveRepo subjectiveRepo,
+  ) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('forms_subjective_answer')
+          .add({
+        'answer': subjectiveRepo.answer,
+      });
+    } catch (e) {
+      print(e);
+      returnError(e.toString());
+    }
+  }
+
   Future<bool> verifyIfIdExists(
     QuestionRepo questionRepo,
   ) async {

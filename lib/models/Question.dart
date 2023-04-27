@@ -36,6 +36,18 @@ class QuestionRepo {
   }
 }
 
+class SubjectiveRepo {
+  String answer = '';
+
+  SubjectiveRepo({
+    this.answer = '',
+  });
+
+  void reset() {
+    answer = '';
+  }
+}
+
 final List<Question> sample_data = [
   Question(
       id: 1,

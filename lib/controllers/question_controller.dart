@@ -10,6 +10,7 @@ class QuestionController extends GetxController
 //animate progressbar based on answered questions
   AnimationController? _animationController;
   QuestionRepo questionRepo = QuestionRepo();
+  SubjectiveRepo subjectiveRepoObj = SubjectiveRepo();
   Animation? _animation;
 
   Animation get animation => _animation!;
@@ -113,6 +114,17 @@ class QuestionController extends GetxController
     }
   }
 
+  Future<void> postAnswerSubjectiveFireBase(
+      SubjectiveRepo subjectiveRepo) async {
+    try {
+      subjectiveRepoObj = subjectiveRepo;
+      await FormsRepoService().createResultsSubjectiveForm(subjectiveRepoObj);
+      subjectiveRepo.reset();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<List<dynamic>> getAnswerFireBase() async {
     try {
       list = await FormsRepoService().getResultsForm();
@@ -146,7 +158,7 @@ class QuestionController extends GetxController
     if (_correctAns == _selectedAns) _numOfCorrectAns++;
     updateCounterAnswer(selectedAns);
     update();
-    print(question.id);
+
     Future.delayed(const Duration(seconds: 1), () {
       _isAnswered = false;
       _pageController.nextPage(
