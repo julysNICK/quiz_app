@@ -15,7 +15,7 @@ class QuizScreen extends StatelessWidget {
         elevation: 0,
         actions: [
           TextButton(
-            onPressed: () => Get.to(const AfterQuiz()),
+            onPressed: () => Get.to(AfterQuiz()),
             child: const Text(
               "Pular",
               style: TextStyle(

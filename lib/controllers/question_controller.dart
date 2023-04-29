@@ -42,10 +42,12 @@ class QuestionController extends GetxController
 
   final List<Question> _questions = sample_data
       .map((question) => Question(
-          id: question.id,
-          question: question.question,
-          options: question.options,
-          answer: question.answer))
+            id: question.id,
+            question: question.question,
+            options: question.options,
+            answer: question.answer,
+            type: question.type,
+          ))
       .toList();
   List<Question> get questions => _questions;
 
@@ -156,7 +158,7 @@ class QuestionController extends GetxController
     }
 
     if (question.id == 36) {
-      Get.to(() => const AfterQuiz());
+      Get.to(() => AfterQuiz());
     }
   }
 
