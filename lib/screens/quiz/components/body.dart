@@ -5,7 +5,6 @@ import 'package:quiz_app/screens/quiz/components/progress_bar.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
 import '../../../constrants.dart';
-import '../../after_quiz/after_quiz_screen.dart';
 import 'questionCard.dart';
 
 class Body extends StatelessWidget {
@@ -61,15 +60,9 @@ class Body extends StatelessWidget {
                   controller: questionController.pageController,
                   onPageChanged: questionController.updateTheQnNum,
                   itemCount: questionController.questions.length,
-                  itemBuilder: (context, index) =>
-                      questionController.questions[index].question ==
-                              "objective"
-                          ? QuestionCard(
-                              question: questionController.questions[index],
-                            )
-                          : AfterQuiz(
-                              titleButton: "Responder",
-                            ),
+                  itemBuilder: (context, index) => QuestionCard(
+                    question: questionController.questions[index],
+                  ),
                 ),
               )
             ],

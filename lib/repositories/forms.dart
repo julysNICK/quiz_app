@@ -40,6 +40,7 @@ class FormsRepoService {
       await FirebaseFirestore.instance
           .collection('forms_subjective_answer')
           .add({
+        "id": subjectiveRepo.id,
         'answer': subjectiveRepo.answer,
       });
     } catch (e) {

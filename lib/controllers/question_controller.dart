@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quiz_app/screens/choose/choose_screen.dart';
 
 import '../models/Question.dart';
 import '../repositories/forms.dart';
@@ -16,6 +17,8 @@ class QuestionController extends GetxController
   Animation? _animation;
 
   PageController get pageController => _pageController;
+  PageController get pageControllerSub => _pageControllerSub;
+
   List<Map<String, dynamic>> list = [];
 
   bool _isAnswered = false;
@@ -49,9 +52,20 @@ class QuestionController extends GetxController
             type: question.type,
           ))
       .toList();
+
   List<Question> get questions => _questions;
 
+  final List<SubjectiveQuestion> _subjectiveQuestions = subjectiveQuestions
+      .map((question) => SubjectiveQuestion(
+            id: question.id,
+            question: question.question,
+          ))
+      .toList();
+
+  List<SubjectiveQuestion> get questionsSubjective => _subjectiveQuestions;
+
   final PageController _pageController = PageController();
+  final PageController _pageControllerSub = PageController();
 
   final Map<String, int> counterAnswer = {
     'concordo': 0,
@@ -60,6 +74,14 @@ class QuestionController extends GetxController
     'nao_concordo_parcialmente': 0,
     'neutro': 0,
   };
+
+  @override
+  void dispose() {
+    _animationController!.dispose();
+    _pageController.dispose();
+    _pageControllerSub.dispose();
+    super.dispose();
+  }
 
   void updateCounterAnswer(int index) {
     switch (index) {
@@ -159,6 +181,31 @@ class QuestionController extends GetxController
 
     if (question.id == 36) {
       Get.to(() => AfterQuiz());
+    }
+  }
+
+  void checkAnsSub(SubjectiveRepo question, int selectedAns) async {
+    questionRepo.id = question.id;
+
+    _selectedAns = selectedAns;
+
+    updateCounterAnswer(selectedAns);
+    update();
+
+    Future.delayed(const Duration(seconds: 1), () {
+      _isAnswered = false;
+      _pageControllerSub.nextPage(
+          duration: const Duration(milliseconds: 250), curve: Curves.ease);
+    });
+
+    try {
+      await postAnswerSubjectiveFireBase(question);
+    } catch (e) {
+      print(e);
+    }
+
+    if (question.id == 2) {
+      Get.to(() => const Choose());
     }
   }
 

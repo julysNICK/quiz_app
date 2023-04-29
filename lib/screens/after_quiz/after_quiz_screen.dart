@@ -67,22 +67,22 @@ class _AfterQuizState extends State<AfterQuiz> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.001,
                   ),
-                  // Padding(
-                  //   padding:
-                  //       const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                  //   child: Text.rich(
-                  //     TextSpan(
-                  //       text: "Quase lá!",
-                  //       style: Theme.of(context)
-                  //           .textTheme
-                  //           .headlineMedium!
-                  //           .copyWith(color: kSecondaryColor),
-                  //     ),
-                  //   ),
-                  // ),
-                  // const Divider(
-                  //   thickness: 1.5,
-                  // ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                    child: Text.rich(
+                      TextSpan(
+                        text: "Quase lá!",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium!
+                            .copyWith(color: kSecondaryColor),
+                      ),
+                    ),
+                  ),
+                  const Divider(
+                    thickness: 1.5,
+                  ),
                   Expanded(
                     child: Container(
                       margin: const EdgeInsets.all(kDefaultPadding),
@@ -95,9 +95,19 @@ class _AfterQuizState extends State<AfterQuiz> {
                           ),
                         ),
                       ),
-                      child: CardSubjective(
-                        subjectiveRepoObj: subjectiveRepoObj,
-                        titleButton: widget.titleButton,
+                      child: Expanded(
+                        child: PageView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          controller: questionController.pageControllerSub,
+                          itemCount:
+                              questionController.questionsSubjective.length,
+                          itemBuilder: (context, index) => CardSubjective(
+                            subjectiveRepoObj: subjectiveRepoObj,
+                            titleButton: widget.titleButton,
+                            subjectiveQuestObj:
+                                questionController.questionsSubjective[index],
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -113,12 +123,14 @@ class _AfterQuizState extends State<AfterQuiz> {
 
 class CardSubjective extends StatefulWidget {
   SubjectiveRepo subjectiveRepoObj = SubjectiveRepo();
+  SubjectiveQuestion subjectiveQuestObj = SubjectiveQuestion();
   String titleButton;
 
   CardSubjective({
     super.key,
     required this.subjectiveRepoObj,
     required this.titleButton,
+    required this.subjectiveQuestObj,
   });
 
   @override
@@ -134,14 +146,16 @@ class _CardSubjectiveState extends State<CardSubjective> {
       try {
         await questionController
             .postAnswerSubjectiveFireBase(widget.subjectiveRepoObj);
-        Get.snackbar(
-          "Obrigado!",
-          "Sua resposta foi enviada com sucesso!",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-          duration: const Duration(seconds: 3),
-        );
+        widget.subjectiveQuestObj.id == 2
+            ? Get.snackbar(
+                "Obrigado!",
+                "Sua resposta foi enviada com sucesso!",
+                snackPosition: SnackPosition.BOTTOM,
+                backgroundColor: Colors.green,
+                colorText: Colors.white,
+                duration: const Duration(seconds: 3),
+              )
+            : null;
         // Get.to(() => const Choose());
       } catch (e) {
         Get.snackbar(
@@ -163,7 +177,7 @@ class _CardSubjectiveState extends State<CardSubjective> {
     return Column(
       children: [
         Text(
-          "Você tem alguma sugestão ou comentário para melhorar o clima organizacional na empresa?",
+          widget.subjectiveQuestObj.question,
           style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                 color: kBlackColor,
                 fontSize: MediaQuery.of(context).size.height * 0.025,
@@ -224,7 +238,9 @@ class _CardSubjectiveState extends State<CardSubjective> {
             }
           },
           child: buttonTextFInish(
-            titleButton: widget.titleButton,
+            titleButton: widget.subjectiveQuestObj.id == 2
+                ? widget.titleButton
+                : "Próximo",
           ),
         )
       ],

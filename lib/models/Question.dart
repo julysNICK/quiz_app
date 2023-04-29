@@ -40,16 +40,43 @@ class QuestionRepo {
 }
 
 class SubjectiveRepo {
+  int id = 0;
   String answer = '';
 
   SubjectiveRepo({
     this.answer = '',
+    this.id = 0,
   });
 
   void reset() {
     answer = '';
   }
 }
+
+class SubjectiveQuestion {
+  int id = 0;
+  String question = '';
+
+  SubjectiveQuestion({
+    this.question = '',
+    this.id = 0,
+  });
+
+  void reset() {
+    question = '';
+  }
+}
+
+List<SubjectiveQuestion> subjectiveQuestions = [
+  SubjectiveQuestion(
+    id: 1,
+    question: "test1",
+  ),
+  SubjectiveQuestion(
+    id: 2,
+    question: "test2",
+  )
+];
 
 final List<Question> sample_data = [
   Question(
