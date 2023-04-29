@@ -171,7 +171,7 @@ class QuestionController extends GetxController
       print(e);
     }
 
-    if (question.id == 8) {
+    if (question.id == 36) {
       Get.to(() => const AfterQuiz());
     }
   }

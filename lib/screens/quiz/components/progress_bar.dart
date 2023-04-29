@@ -27,7 +27,7 @@ class ProgressBar extends StatelessWidget {
                 LayoutBuilder(builder: (context, constraints) {
                   return Container(
                     width: constraints.maxWidth *
-                        (controller.questionNumberInt / 8),
+                        (controller.questionNumberInt / 36),
                     decoration: const BoxDecoration(
                       gradient: kPrimaryGradient,
                       borderRadius: BorderRadius.all(
