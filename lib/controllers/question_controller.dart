@@ -7,58 +7,18 @@ import '../screens/after_quiz/after_quiz_screen.dart';
 
 class QuestionController extends GetxController
     with GetSingleTickerProviderStateMixin {
-//animate progressbar based on answered questions
   AnimationController? _animationController;
   QuestionRepo questionRepo = QuestionRepo();
   SubjectiveRepo subjectiveRepoObj = SubjectiveRepo();
   Animation? _animation;
 
-  Animation get animation => _animation!;
-
-  @override
-  void onInit() {
-    _animationController =
-        AnimationController(duration: const Duration(seconds: 60), vsync: this);
-    _animation = Tween<double>(begin: 0, end: 1).animate(_animationController!)
-      ..addListener(() {
-        update();
-      });
-    _animationController!.forward();
-    super.onInit();
-  }
-
-  @override
-  void onClose() {
-    _animationController!.dispose();
-    super.onClose();
-  }
-
-  final List<Question> _questions = sample_data
-      .map((question) => Question(
-          id: question.id,
-          question: question.question,
-          options: question.options,
-          answer: question.answer))
-      .toList();
-
-  final PageController _pageController = PageController();
-
-  final Map<String, int> counterAnswer = {
-    'concordo': 0,
-    'concordo_parcialmente': 0,
-    'nao_concordo': 0,
-    'nao_concordo_parcialmente': 0,
-    'neutro': 0,
-  };
-
   PageController get pageController => _pageController;
   List<Map<String, dynamic>> list = [];
-  Map<String, dynamic> resultList = {};
-  List<dynamic> newList = [];
-  List<Question> get questions => _questions;
+
   bool _isAnswered = false;
 
   bool get isAnswered => _isAnswered;
+
   int _correctAns = 0;
 
   int get correctAns => _correctAns;
@@ -76,6 +36,25 @@ class QuestionController extends GetxController
   int _numOfCorrectAns = 0;
 
   int get numOfCorrectAns => _numOfCorrectAns;
+
+  final List<Question> _questions = sample_data
+      .map((question) => Question(
+          id: question.id,
+          question: question.question,
+          options: question.options,
+          answer: question.answer))
+      .toList();
+  List<Question> get questions => _questions;
+
+  final PageController _pageController = PageController();
+
+  final Map<String, int> counterAnswer = {
+    'concordo': 0,
+    'concordo_parcialmente': 0,
+    'nao_concordo': 0,
+    'nao_concordo_parcialmente': 0,
+    'neutro': 0,
+  };
 
   void updateCounterAnswer(int index) {
     switch (index) {
@@ -153,7 +132,9 @@ class QuestionController extends GetxController
   void checkAns(Question question, int selectedAns) async {
     _isAnswered = true;
     _correctAns = question.answer;
+
     questionRepo.id = question.id;
+
     _selectedAns = selectedAns;
     if (_correctAns == _selectedAns) _numOfCorrectAns++;
     updateCounterAnswer(selectedAns);
