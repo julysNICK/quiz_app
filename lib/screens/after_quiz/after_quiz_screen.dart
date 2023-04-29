@@ -164,17 +164,7 @@ class _AfterQuizState extends State<AfterQuiz> {
                                 print(e);
                               }
                             },
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.5,
-                              child: const Text(
-                                "Concluir questionário",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
+                            child: const buttonTextFInish(),
                           )
                         ],
                       ),
@@ -185,6 +175,27 @@ class _AfterQuizState extends State<AfterQuiz> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class buttonTextFInish extends StatelessWidget {
+  const buttonTextFInish({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.5,
+      child: const Text(
+        "Concluir questionário",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

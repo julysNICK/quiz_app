@@ -8,8 +8,11 @@ import '../screens/after_quiz/after_quiz_screen.dart';
 class QuestionController extends GetxController
     with GetSingleTickerProviderStateMixin {
   AnimationController? _animationController;
+
   QuestionRepo questionRepo = QuestionRepo();
+
   SubjectiveRepo subjectiveRepoObj = SubjectiveRepo();
+
   Animation? _animation;
 
   PageController get pageController => _pageController;
