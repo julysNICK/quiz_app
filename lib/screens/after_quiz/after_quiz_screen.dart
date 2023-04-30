@@ -95,19 +95,25 @@ class _AfterQuizState extends State<AfterQuiz> {
                           ),
                         ),
                       ),
-                      child: Expanded(
-                        child: PageView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          controller: questionController.pageControllerSub,
-                          itemCount:
-                              questionController.questionsSubjective.length,
-                          itemBuilder: (context, index) => CardSubjective(
-                            subjectiveRepoObj: subjectiveRepoObj,
-                            titleButton: widget.titleButton,
-                            subjectiveQuestObj:
-                                questionController.questionsSubjective[index],
+                      child: Flex(
+                        direction: Axis.vertical,
+                        children: [
+                          Flexible(
+                            flex: 1,
+                            child: PageView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              controller: questionController.pageControllerSub,
+                              itemCount:
+                                  questionController.questionsSubjective.length,
+                              itemBuilder: (context, index) => CardSubjective(
+                                subjectiveRepoObj: subjectiveRepoObj,
+                                subjectiveQuestObj: questionController
+                                    .questionsSubjective[index],
+                                titleButton: widget.titleButton,
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
                   ),
@@ -139,13 +145,15 @@ class CardSubjective extends StatefulWidget {
 
 class _CardSubjectiveState extends State<CardSubjective> {
   final _formKey = GlobalKey<FormState>();
+  QuestionController questionControllerSub = Get.put(QuestionController());
 
   Future<void> createSubjectiveAnswer(
       QuestionController questionController) async {
     if (_formKey.currentState!.validate()) {
       try {
-        await questionController
-            .postAnswerSubjectiveFireBase(widget.subjectiveRepoObj);
+        await questionControllerSub.checkAnsSub(SubjectiveRepo(
+            answer: widget.subjectiveRepoObj.answer,
+            id: widget.subjectiveQuestObj.id));
         widget.subjectiveQuestObj.id == 2
             ? Get.snackbar(
                 "Obrigado!",
@@ -174,76 +182,79 @@ class _CardSubjectiveState extends State<CardSubjective> {
   Widget build(BuildContext context) {
     double containerHeight = MediaQuery.of(context).size.height * 0.15;
     QuestionController questionController = Get.put(QuestionController());
-    return Column(
-      children: [
-        Text(
-          widget.subjectiveQuestObj.question,
-          style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                color: kBlackColor,
-                fontSize: MediaQuery.of(context).size.height * 0.025,
-              ),
-        ),
-        AnimatedContainer(
-          duration: const Duration(milliseconds: 500),
-          height: containerHeight,
-          child: TextFormField(
-            textAlignVertical: TextAlignVertical.top,
-            onChanged: (value) {
-              setState(() {
-                containerHeight = MediaQuery.of(context).size.height * 0.5;
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          Text(
+            widget.subjectiveQuestObj.question,
+            style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                  color: kBlackColor,
+                  fontSize: MediaQuery.of(context).size.height * 0.025,
+                ),
+          ),
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 500),
+            height: containerHeight,
+            child: TextFormField(
+              textAlignVertical: TextAlignVertical.top,
+              onChanged: (value) {
+                setState(() {
+                  containerHeight = MediaQuery.of(context).size.height * 0.5;
 
-                widget.subjectiveRepoObj.answer = value;
-              });
-            },
-            expands: true,
-            maxLines: null,
-            minLines: null,
-            decoration: const InputDecoration(
-              contentPadding: EdgeInsets.symmetric(vertical: 1),
-              hintText: 'Digite aqui',
-              border: OutlineInputBorder(),
-              filled: true,
-              fillColor: Color(0xFF1C2341),
+                  widget.subjectiveRepoObj.answer = value;
+                });
+              },
+              expands: true,
+              maxLines: null,
+              minLines: null,
+              decoration: const InputDecoration(
+                contentPadding: EdgeInsets.symmetric(vertical: 1),
+                hintText: 'Digite aqui',
+                border: OutlineInputBorder(),
+                filled: true,
+                fillColor: Color(0xFF1C2341),
+              ),
+              strutStyle: const StrutStyle(
+                height: 1.5,
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Por favor, digite algo';
+                }
+                return null;
+              },
             ),
-            strutStyle: const StrutStyle(
-              height: 1.5,
+          ),
+          const SizedBox(
+            height: kDefaultPadding,
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: kSecondaryColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25),
+              ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: kDefaultPadding * 2,
+                vertical: kDefaultPadding,
+              ),
             ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Por favor, digite algo';
+            onPressed: () async {
+              try {
+                await createSubjectiveAnswer(questionController);
+              } catch (e) {
+                print(e);
               }
-              return null;
             },
-          ),
-        ),
-        const SizedBox(
-          height: kDefaultPadding,
-        ),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: kSecondaryColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25),
+            child: buttonTextFInish(
+              titleButton: widget.subjectiveQuestObj.id == 2
+                  ? widget.titleButton
+                  : "Próximo",
             ),
-            padding: const EdgeInsets.symmetric(
-              horizontal: kDefaultPadding * 2,
-              vertical: kDefaultPadding,
-            ),
-          ),
-          onPressed: () async {
-            try {
-              await createSubjectiveAnswer(questionController);
-            } catch (e) {
-              print(e);
-            }
-          },
-          child: buttonTextFInish(
-            titleButton: widget.subjectiveQuestObj.id == 2
-                ? widget.titleButton
-                : "Próximo",
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }

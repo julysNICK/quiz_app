@@ -124,10 +124,30 @@ class QuestionController extends GetxController
       SubjectiveRepo subjectiveRepo) async {
     try {
       subjectiveRepoObj = subjectiveRepo;
-      await FormsRepoService().createResultsSubjectiveForm(subjectiveRepoObj);
+      print(subjectiveRepoObj);
+      await FormsRepoService().updateResultsSubjectiveForms(subjectiveRepoObj);
       subjectiveRepo.reset();
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<List<dynamic>> getAnswerSubjectiveFireBase() async {
+    try {
+      list = await FormsRepoService().getResultsSubjectiveForm();
+      List formatList = list.map(
+        (e) {
+          return {
+            'id': e['id'],
+            'answers': e['answers'],
+          };
+        },
+      ).toList();
+
+      return formatList;
+    } catch (e) {
+      print(e);
+      return [];
     }
   }
 
@@ -149,7 +169,7 @@ class QuestionController extends GetxController
         },
       ).toList();
 
-      return formatList..sort((a, b) => a['_id'].compareTo(b['_id']));
+      return formatList..sort((a, b) => a['_id'].compareTo(b['_id'] ?? 0));
     } catch (e) {
       print(e);
       return [];
@@ -184,12 +204,9 @@ class QuestionController extends GetxController
     }
   }
 
-  void checkAnsSub(SubjectiveRepo question, int selectedAns) async {
+  Future<void> checkAnsSub(SubjectiveRepo question) async {
     questionRepo.id = question.id;
 
-    _selectedAns = selectedAns;
-
-    updateCounterAnswer(selectedAns);
     update();
 
     Future.delayed(const Duration(seconds: 1), () {
@@ -197,7 +214,6 @@ class QuestionController extends GetxController
       _pageControllerSub.nextPage(
           duration: const Duration(milliseconds: 250), curve: Curves.ease);
     });
-
     try {
       await postAnswerSubjectiveFireBase(question);
     } catch (e) {

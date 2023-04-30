@@ -7,14 +7,15 @@ import '../../constrants.dart';
 import '../../controllers/question_controller.dart';
 import '../../models/Question.dart';
 
-class DetailsResults extends StatefulWidget {
-  const DetailsResults({super.key});
+class DetailsResultsSubjective extends StatefulWidget {
+  const DetailsResultsSubjective({super.key});
 
   @override
-  State<DetailsResults> createState() => _DetailsResultsState();
+  State<DetailsResultsSubjective> createState() =>
+      _DetailsResultsSubjectiveState();
 }
 
-class _DetailsResultsState extends State<DetailsResults> {
+class _DetailsResultsSubjectiveState extends State<DetailsResultsSubjective> {
   QuestionController questionController = Get.put(QuestionController());
   List<dynamic> newList = [];
   @override
@@ -22,28 +23,11 @@ class _DetailsResultsState extends State<DetailsResults> {
     // TODO: implement initState
     super.initState();
 
-    questionController.getAnswerFireBase().then((value) {
+    questionController.getAnswerSubjectiveFireBase().then((value) {
       setState(() {
         newList = value;
       });
     });
-  }
-
-  String formmatString(String string) {
-    switch (string) {
-      case 'concordo':
-        return 'Concordo';
-      case 'concordo_parcialmente':
-        return 'Concordo parcialmente';
-      case 'nao_concordo':
-        return 'Não concordo';
-      case 'nao_concordo_parcialmente':
-        return 'Não concordo parcialmente';
-      case 'neutro':
-        return 'Neutro';
-      default:
-        return 'Não respondido';
-    }
   }
 
   @override
@@ -72,7 +56,7 @@ class _DetailsResultsState extends State<DetailsResults> {
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold))),
               ),
-              sample_data.isEmpty && newList.isEmpty
+              subjectiveQuestions.isEmpty && newList.isEmpty
                   ? const Center(
                       child: Text("Sem dados",
                           style: TextStyle(
@@ -80,13 +64,15 @@ class _DetailsResultsState extends State<DetailsResults> {
                   : ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: sample_data.length,
+                      itemCount: subjectiveQuestions.length,
                       itemBuilder: (context, index) {
+                        // return buildCard(
+                        //     context, sample_data[index], newList[index]);
                         if (index >= 0 &&
-                            index < sample_data.length &&
+                            index < subjectiveQuestions.length &&
                             index < newList.length) {
-                          return buildCard(
-                              context, sample_data[index], newList[index]);
+                          return buildCard(context, subjectiveQuestions[index],
+                              newList[index]);
                         } else {
                           return null;
                         }
@@ -99,8 +85,8 @@ class _DetailsResultsState extends State<DetailsResults> {
     );
   }
 
-  Padding buildCard(
-      BuildContext context, Question question, Map<String, dynamic> newList) {
+  Padding buildCard(BuildContext context, SubjectiveQuestion question,
+      Map<String, dynamic> newList) {
     return Padding(
       padding: const EdgeInsetsDirectional.all(10),
       child: Card(
@@ -128,24 +114,9 @@ class _DetailsResultsState extends State<DetailsResults> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: newList.isNotEmpty
-                  ? newList.entries
-                      .map((e) => Padding(
-                            padding: const EdgeInsets.all(0.0),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: e.key != '_id'
-                                      ? Text(
-                                          '${formmatString(e.key)}: ${e.value.toString()}',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15,
-                                          ),
-                                        )
-                                      : Container(),
-                                ),
-                              ],
-                            ),
+                  ? newList['answers']
+                      .map<Widget>((answer) => ListTile(
+                            title: Text(answer),
                           ))
                       .toList()
                   : [const Text('Sem respostas')],

@@ -41,7 +41,7 @@ class FormsRepoService {
           .collection('forms_subjective_answer')
           .add({
         "id": subjectiveRepo.id,
-        'answer': subjectiveRepo.answer,
+        'answers': [subjectiveRepo.answer],
       });
     } catch (e) {
       print(e);
@@ -71,6 +71,29 @@ class FormsRepoService {
     }
   }
 
+  Future<bool> verifySubjectiveIfIdExists(
+    SubjectiveRepo questionRepo,
+  ) async {
+    try {
+      print(questionRepo.id);
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('forms_subjective_answer')
+              .where('id', isEqualTo: questionRepo.id)
+              .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print(e);
+      returnError(e.toString());
+      return false;
+    }
+  }
+
   Future<dynamic> getResultsFormById(
     QuestionRepo questionRepo,
   ) async {
@@ -79,6 +102,28 @@ class FormsRepoService {
           await FirebaseFirestore.instance
               .collection('forms')
               .where('_id', isEqualTo: questionRepo.id)
+              .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs.first;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print(e);
+      returnError(e.toString());
+      return null;
+    }
+  }
+
+  Future<dynamic> getResultsSubjectiveFormById(
+    SubjectiveRepo questionRepo,
+  ) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('forms_subjective_answer')
+              .where('id', isEqualTo: questionRepo.id)
               .get();
 
       if (querySnapshot.docs.isNotEmpty) {
@@ -120,6 +165,28 @@ class FormsRepoService {
     }
   }
 
+  Future updateResultsSubjectiveForms(SubjectiveRepo question) async {
+    try {
+      if (await verifySubjectiveIfIdExists(question)) {
+        print("cai aqui");
+        dynamic result = await getResultsSubjectiveFormById(question);
+        print(result.data()['answers']);
+
+        await FirebaseFirestore.instance
+            .collection('forms_subjective_answer')
+            .doc('${result.id}')
+            .update({
+          'answers': result.data()['answers'] + [question.answer],
+        });
+      } else {
+        await createResultsSubjectiveForm(question);
+      }
+    } catch (e) {
+      print(e);
+      returnError(e.toString());
+    }
+  }
+
   Future<List<Map<String, dynamic>>> getResultsForm() async {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
@@ -135,6 +202,26 @@ class FormsRepoService {
     } catch (e) {
       print(e);
       returnError(e.toString());
+    }
+    return [];
+  }
+
+  Future<List<Map<String, dynamic>>> getResultsSubjectiveForm() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('forms_subjective_answer')
+              .get();
+
+      List<Map<String, dynamic>> list = [];
+
+      for (var element in querySnapshot.docs) {
+        list.add(element.data());
+      }
+
+      return list;
+    } catch (e) {
+      print(e);
     }
     return [];
   }
