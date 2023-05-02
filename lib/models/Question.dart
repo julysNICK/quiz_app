@@ -70,11 +70,12 @@ class SubjectiveQuestion {
 List<SubjectiveQuestion> subjectiveQuestions = [
   SubjectiveQuestion(
     id: 1,
-    question: "test1",
+    question: "Como você percebe o ambiente externo da empresa?",
   ),
   SubjectiveQuestion(
     id: 2,
-    question: "test2",
+    question:
+        "Você tem alguma sugestão ou comentário para melhorar o clima organizacional na empresa?",
   )
 ];
 

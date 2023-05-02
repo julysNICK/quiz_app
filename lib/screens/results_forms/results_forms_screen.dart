@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:quiz_app/screens/details_results/details_results_screen.dart';
 import 'package:websafe_svg/websafe_svg.dart';
+
+import '../type_question/type_question_screen.dart';
 
 class ResultsForms extends StatelessWidget {
   const ResultsForms({super.key});
@@ -11,7 +12,7 @@ class ResultsForms extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text("ResultsForms"),
+        title: const Text("Resultados dos formulários"),
         backgroundColor: Colors.grey[900]!.withOpacity(0.8),
         elevation: 0,
       ),
@@ -39,7 +40,7 @@ class ResultsForms extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         child: Card(
           child: ListTile(
-            onTap: () => Get.to(() => const DetailsResults()),
+            onTap: () => Get.to(() => const Typequestion()),
             title: Text(s),
             subtitle: const Text('Ver resultados'),
             trailing: const Icon(Icons.arrow_forward_ios),

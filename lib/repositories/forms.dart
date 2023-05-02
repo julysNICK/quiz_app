@@ -75,7 +75,6 @@ class FormsRepoService {
     SubjectiveRepo questionRepo,
   ) async {
     try {
-      print(questionRepo.id);
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await FirebaseFirestore.instance
               .collection('forms_subjective_answer')
@@ -168,9 +167,7 @@ class FormsRepoService {
   Future updateResultsSubjectiveForms(SubjectiveRepo question) async {
     try {
       if (await verifySubjectiveIfIdExists(question)) {
-        print("cai aqui");
         dynamic result = await getResultsSubjectiveFormById(question);
-        print(result.data()['answers']);
 
         await FirebaseFirestore.instance
             .collection('forms_subjective_answer')

@@ -13,7 +13,7 @@ class Typequestion extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text("Type question"),
+        title: const Text("Tipo de questão"),
         backgroundColor: Colors.grey[900]!.withOpacity(0.8),
         elevation: 0,
       ),

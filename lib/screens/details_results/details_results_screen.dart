@@ -17,16 +17,12 @@ class DetailsResults extends StatefulWidget {
 class _DetailsResultsState extends State<DetailsResults> {
   QuestionController questionController = Get.put(QuestionController());
   List<dynamic> newList = [];
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
 
-    questionController.getAnswerFireBase().then((value) {
-      setState(() {
-        newList = value;
-      });
+  Future<List<dynamic>> getQuestions() async {
+    await questionController.getAnswerFireBase().then((value) {
+      newList = value;
     });
+    return newList;
   }
 
   String formmatString(String string) {
@@ -63,36 +59,89 @@ class _DetailsResultsState extends State<DetailsResults> {
             height: double.infinity,
             fit: BoxFit.fill,
           ),
-          ListView(
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 20, bottom: 10),
-                child: Center(
-                    child: Text("Perguntas e respostas",
+          // ListView(
+          //   children: [
+          //     const Padding(
+          //       padding: EdgeInsets.only(top: 20, bottom: 10),
+          //       child: Center(
+          //           child: Text("Perguntas e respostas",
+          //               style: TextStyle(
+          //                   fontSize: 20, fontWeight: FontWeight.bold))),
+          //     ),
+          //     sample_data.isEmpty && newList.isEmpty
+          //         ? const Center(
+          //             child: Text("Sem dados",
+          //                 style: TextStyle(
+          //                     fontSize: 20, fontWeight: FontWeight.bold)))
+          //         : ListView.builder(
+          //             shrinkWrap: true,
+          //             physics: const NeverScrollableScrollPhysics(),
+          //             itemCount: sample_data.length,
+          //             itemBuilder: (context, index) {
+          //               if (index >= 0 &&
+          //                   index < sample_data.length &&
+          //                   index < newList.length) {
+          //                 return buildCard(
+          //                     context, sample_data[index], newList[index]);
+          //               } else {
+          //                 return null;
+          //               }
+          //             },
+          //           ),
+          //   ],
+          // )
+
+          FutureBuilder(
+            builder: (context, snap) {
+              if (snap.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snap.connectionState == ConnectionState.done) {
+                if (snap.hasData) {
+                  return ListView(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(top: 20, bottom: 10),
+                        child: Center(
+                            child: Text("Perguntas e respostas",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold))),
+                      ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: snap.data?.length,
+                        itemBuilder: (context, index) {
+                          if (index >= 0 &&
+                              index < sample_data.length &&
+                              index < newList.length) {
+                            return buildCard(
+                                context, sample_data[index], newList[index]);
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
+                    ],
+                  );
+                } else {
+                  return const Center(
+                    child: Text("Sem dados",
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold))),
-              ),
-              sample_data.isEmpty && newList.isEmpty
-                  ? const Center(
-                      child: Text("Sem dados",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)))
-                  : ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: sample_data.length,
-                      itemBuilder: (context, index) {
-                        if (index >= 0 &&
-                            index < sample_data.length &&
-                            index < newList.length) {
-                          return buildCard(
-                              context, sample_data[index], newList[index]);
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
-            ],
+                            fontSize: 20, fontWeight: FontWeight.bold)),
+                  );
+                }
+              } else {
+                return const Center(
+                  child: Text("Sem dados",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                );
+              }
+            },
+            future: getQuestions(),
           )
         ],
       ),

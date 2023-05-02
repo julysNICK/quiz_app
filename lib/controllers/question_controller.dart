@@ -124,7 +124,7 @@ class QuestionController extends GetxController
       SubjectiveRepo subjectiveRepo) async {
     try {
       subjectiveRepoObj = subjectiveRepo;
-      print(subjectiveRepoObj);
+
       await FormsRepoService().updateResultsSubjectiveForms(subjectiveRepoObj);
       subjectiveRepo.reset();
     } catch (e) {

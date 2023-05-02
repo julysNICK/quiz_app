@@ -18,16 +18,11 @@ class DetailsResultsSubjective extends StatefulWidget {
 class _DetailsResultsSubjectiveState extends State<DetailsResultsSubjective> {
   QuestionController questionController = Get.put(QuestionController());
   List<dynamic> newList = [];
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    questionController.getAnswerSubjectiveFireBase().then((value) {
-      setState(() {
-        newList = value;
-      });
+  Future<List<dynamic>> getSubjectiveQuestions() async {
+    await questionController.getAnswerSubjectiveFireBase().then((value) {
+      newList = value;
     });
+    return newList;
   }
 
   @override
@@ -47,38 +42,57 @@ class _DetailsResultsSubjectiveState extends State<DetailsResultsSubjective> {
             height: double.infinity,
             fit: BoxFit.fill,
           ),
-          ListView(
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 20, bottom: 10),
-                child: Center(
-                    child: Text("Perguntas e respostas",
+          FutureBuilder(
+            builder: (context, snap) {
+              if (snap.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snap.connectionState == ConnectionState.done) {
+                if (snap.hasData) {
+                  return ListView(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(top: 20, bottom: 10),
+                        child: Center(
+                            child: Text("Perguntas e respostas",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold))),
+                      ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: snap.data?.length,
+                        itemBuilder: (context, index) {
+                          if (index >= 0 &&
+                              index < subjectiveQuestions.length &&
+                              index < newList.length) {
+                            return buildCard(context,
+                                subjectiveQuestions[index], newList[index]);
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
+                    ],
+                  );
+                } else {
+                  return const Center(
+                    child: Text("Sem dados",
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold))),
-              ),
-              subjectiveQuestions.isEmpty && newList.isEmpty
-                  ? const Center(
-                      child: Text("Sem dados",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)))
-                  : ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: subjectiveQuestions.length,
-                      itemBuilder: (context, index) {
-                        // return buildCard(
-                        //     context, sample_data[index], newList[index]);
-                        if (index >= 0 &&
-                            index < subjectiveQuestions.length &&
-                            index < newList.length) {
-                          return buildCard(context, subjectiveQuestions[index],
-                              newList[index]);
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
-            ],
+                            fontSize: 20, fontWeight: FontWeight.bold)),
+                  );
+                }
+              } else {
+                return const Center(
+                  child: Text("Sem dados",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                );
+              }
+            },
+            future: getSubjectiveQuestions(),
           )
         ],
       ),
@@ -111,7 +125,7 @@ class _DetailsResultsSubjectiveState extends State<DetailsResultsSubjective> {
             child: Text('Ver Respostas'),
           ),
           expanded: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(2.0),
             child: Column(
               children: newList.isNotEmpty
                   ? newList['answers']
