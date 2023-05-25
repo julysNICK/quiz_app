@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:quiz_app/screens/choose/choose_screen.dart';
 
 import '../models/Question.dart';
 import '../repositories/forms.dart';
 import '../screens/after_quiz/after_quiz_screen.dart';
+import '../screens/thanks/thanks_screen.dart';
 
 class QuestionController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -221,7 +221,7 @@ class QuestionController extends GetxController
     }
 
     if (question.id == 2) {
-      Get.to(() => const Choose());
+      Get.to(() => Thanks());
     }
   }
 

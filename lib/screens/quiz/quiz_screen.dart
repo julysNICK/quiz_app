@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:quiz_app/screens/after_quiz/after_quiz_screen.dart';
 import 'package:quiz_app/screens/quiz/components/body.dart';
+import 'package:quiz_app/screens/thanks/thanks_screen.dart';
 
 class QuizScreen extends StatelessWidget {
   const QuizScreen({super.key});
@@ -15,7 +15,7 @@ class QuizScreen extends StatelessWidget {
         elevation: 0,
         actions: [
           TextButton(
-            onPressed: () => Get.to(AfterQuiz()),
+            onPressed: () => Get.to(Thanks()),
             child: const Text(
               "Pular",
               style: TextStyle(
