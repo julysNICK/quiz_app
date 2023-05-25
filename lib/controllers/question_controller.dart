@@ -94,17 +94,17 @@ class QuestionController extends GetxController
         questionRepo.partiallyAgree = counterAnswer['concordo_parcialmente'];
         break;
       case 2:
+        counterAnswer['neutro'] = 1;
+        questionRepo.neutral = counterAnswer['neutro'];
+        break;
+      case 3:
         counterAnswer['nao_concordo'] = 1;
         questionRepo.disagree = counterAnswer['nao_concordo'];
         break;
-      case 3:
+      case 4:
         counterAnswer['nao_concordo_parcialmente'] = 1;
         questionRepo.partiallyDisagree =
             counterAnswer['nao_concordo_parcialmente'];
-        break;
-      case 4:
-        counterAnswer['neutro'] = 1;
-        questionRepo.neutral = counterAnswer['neutro'];
         break;
     }
 

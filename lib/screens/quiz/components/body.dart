@@ -35,7 +35,7 @@ class Body extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height: kDefaultPadding,
+                height: kDefaultPadding / 2,
               ),
               Padding(
                 padding:

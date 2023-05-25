@@ -41,9 +41,9 @@ class Option extends StatelessWidget {
           return InkWell(
             onTap: press,
             child: Container(
-              margin: const EdgeInsets.only(top: kDefaultPadding),
+              margin: const EdgeInsets.only(top: kDefaultPadding / 1.7),
               padding:
-                  EdgeInsets.all(MediaQuery.of(context).size.height * 0.030),
+                  EdgeInsets.all(MediaQuery.of(context).size.height * 0.026),
               decoration: BoxDecoration(
                 border: Border.all(color: getTheRightColor()),
                 borderRadius: const BorderRadius.all(
@@ -63,8 +63,8 @@ class Option extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    height: 26,
-                    width: 26,
+                    height: 23,
+                    width: 23,
                     decoration: BoxDecoration(
                       color: getTheRightColor() == kGrayColor
                           ? Colors.transparent
